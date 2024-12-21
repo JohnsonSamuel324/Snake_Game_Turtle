@@ -1,36 +1,41 @@
 from turtle import Turtle
 
+
 MOVE_SPEED = 20
 UP = 90
-DOWN = -90
+DOWN = 270
 LEFT = 180
 RIGHT = 0
 
-class Snake():
+class Snake:
     def __init__(self):
-        self.body_length = body_length = 3
-        self.segments = segments = []
-        self.prev_seg_pos = prev_seg_pos = []
-        self.body_pos = body_pos = (0, 0)
+        self.segments = []
+        self.prev_seg_pos = []
+        self.body_pos = (0.0, 0.0)
         self.create_snake()
         self.head = self.segments[0]
 
     def create_snake(self):
-        for snakeSegment in range(self.body_length):
-            new_segment = Turtle(shape="square")
-            new_segment.color("white")
-            new_segment.penup()
-            new_segment.goto(self.body_pos)
-            new_pos = list(self.body_pos)
-            new_pos[0] -= MOVE_SPEED
-            self.body_pos = tuple(new_pos)
-            self.segments.append(new_segment)
+        for snakeSegment in range(3):
+            self.add_segment()
+
+    def add_segment(self):
+        new_segment = Turtle(shape="square")
+        new_segment.color("white")
+        new_segment.penup()
+        if len(self.segments) > 0:
+            segment_pos_x = self.segments[-1].pos()[0] - 20
+            segment_pos_y = self.segments[-1].pos()[1]
+            new_segment.goto(segment_pos_x, segment_pos_y)
+        else:
+            new_segment.goto(0,0)
+        self.segments.append(new_segment)
 
     def move(self):
         for segment in self.segments:
             if self.segments.index(segment) == 0:
                 self.prev_seg_pos.append(segment.pos())
-                segment.forward(20)
+                segment.forward(MOVE_SPEED)
             else:
                 self.prev_seg_pos.append(segment.pos())
                 segment.goto(self.prev_seg_pos[0])
