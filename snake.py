@@ -14,6 +14,7 @@ class Snake:
         self.body_pos = (0.0, 0.0)
         self.create_snake()
         self.head = self.segments[0]
+        self.paused = True
 
     def create_snake(self):
         for snakeSegment in range(3):
@@ -31,16 +32,28 @@ class Snake:
             new_segment.goto(0,0)
         self.segments.append(new_segment)
 
+    def reset(self):
+        for seg in self.segments:
+            seg.hideturtle()
+        self.segments.clear()
+        self.create_snake()
+        self.head = self.segments[0]
+        self.paused = True
+
+    def unpause(self):
+        self.paused = False
+
     def move(self):
-        for segment in self.segments:
-            if self.segments.index(segment) == 0:
-                self.prev_seg_pos.append(segment.pos())
-                segment.forward(MOVE_SPEED)
-            else:
-                self.prev_seg_pos.append(segment.pos())
-                segment.goto(self.prev_seg_pos[0])
-            if len(self.prev_seg_pos) >= 2:
-                del self.prev_seg_pos[0]
+        if not self.paused:
+            for segment in self.segments:
+                if self.segments.index(segment) == 0:
+                    self.prev_seg_pos.append(segment.pos())
+                    segment.forward(MOVE_SPEED)
+                else:
+                    self.prev_seg_pos.append(segment.pos())
+                    segment.goto(self.prev_seg_pos[0])
+                if len(self.prev_seg_pos) >= 2:
+                    del self.prev_seg_pos[0]
 
     def up(self):
         if self.head.heading() != DOWN:
